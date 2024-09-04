@@ -7,7 +7,7 @@ def usuario_controller():
             try:
                 data = request.get_json()
                 print(data)
-                user = usuario(data['nome'], data['login'], data['senha'])
+                user = usuario(data['nome'], data['cpf'], data['email'], data['telefone'], data['login'], data['senha'])
                 db.session.add(user)
                 db.session.commit()
                 return 'Usuário criado com sucesso', 200
@@ -30,7 +30,9 @@ def usuario_controller():
                 if put_usuario is None:
                     return {'error': 'usuario nao encontrado'}, 404
                 put_usuario.nome = data.get('nome', put_usuario.nome)
+                put_usuario.cpf = data.get('cpf', put_usuario.cpf)
                 put_usuario.email = data.get('email', put_usuario.email)
+                put_usuario.telefone = data.get('telefone', put_usuario.telefone)
                 put_usuario.login = data.get('login', put_usuario.login)
                 put_usuario.senha = data.get('senha', put_usuario.senha)
                 print(put_usuario.nome, put_usuario.email, put_usuario.login, put_usuario.senha)

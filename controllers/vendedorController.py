@@ -1,53 +1,55 @@
 from flask import request, render_template
 from database.db import db
-from models.vendedor import vendedor
+from models.usuario import usuario
 
-def vendedor_controller():
+def usuario_controller():
         if request.method == 'POST':
             try:
                 data = request.get_json()
                 print(data)
-                user = vendedor(data['nome'], data['login'], data['senha'])
+                user = usuario(data['nome'], data['cpf'], data['email'], data['telefone'], data['login'], data['senha'])
                 db.session.add(user)
                 db.session.commit()
-                return 'vendedor criado com sucesso', 200
+                return 'Usuário criado com sucesso', 200
             except Exception as e:
-                return 'O vendedor nao foi criado'.format(str(e)), 405
+                return 'O usuário nao foi criado'.format(str(e)), 405
             
         elif request.method == 'GET':
             try:
-                data = vendedor.query.all()
-                teste = {'vendedores': [vendedor.to_dict() for vendedor in data]}
+                data = usuario.query.all()
+                teste = {'usuarios': [usuario.to_dict() for usuario in data]}
                 return teste
             except Exception as e:
-                return 'Não foi possível buscar vendedores. Error: {}'.format(str(e)), 405
+                return 'Não foi possível buscar usuarios. Error: {}'.format(str(e)), 405
             
         elif request.method == "PUT":
             try:
                 data = request.get_json()
-                put_vendedor_id = data['id']
-                put_vendedor = vendedor.query.get(put_vendedor_id)
-                if put_vendedor is None:
-                    return {'error': 'vendedor nao encontrado'}, 404
-                put_vendedor.nome = data.get('nome', put_vendedor.nome)
-                put_vendedor.email = data.get('email', put_vendedor.email)
-                put_vendedor.login = data.get('login', put_vendedor.login)
-                put_vendedor.senha = data.get('senha', put_vendedor.senha)
-                print(put_vendedor.nome, put_vendedor.email, put_vendedor.login, put_vendedor.senha)
+                put_usuario_id = data['id']
+                put_usuario = usuario.query.get(put_usuario_id)
+                if put_usuario is None:
+                    return {'error': 'usuario nao encontrado'}, 404
+                put_usuario.nome = data.get('nome', put_usuario.nome)
+                put_usuario.cpf = data.get('cpf', put_usuario.cpf)
+                put_usuario.email = data.get('email', put_usuario.email)
+                put_usuario.telefone = data.get('telefone', put_usuario.telefone)
+                put_usuario.login = data.get('login', put_usuario.login)
+                put_usuario.senha = data.get('senha', put_usuario.senha)
+                print(put_usuario.nome, put_usuario.email, put_usuario.login, put_usuario.senha)
                 db.session.commit()
-                return 'vendedor atualizado com sucesso', 200
+                return 'usuario atualizado com sucesso', 200
             except Exception as e:
-                return {'error': 'erro ao atualizar o vendedor. Erro {}'.format(e)}, 400
+                return {'error': 'erro ao atualizar o usuario. Erro {}'.format(e)}, 400
             
         elif request.method == "DELETE":
             try:
                 data = request.get_json()
-                delete_vendedor_id = data['id']
-                delete_vendedor = vendedor.query.get(delete_vendedor_id)
-                if delete_vendedor is None:
-                    return {'error': 'vendedor nao encontrado'}, 404
-                db.session.delete(delete_vendedor)
+                delete_usuario_id = data['id']
+                delete_usuario = usuario.query.get(delete_usuario_id)
+                if delete_usuario is None:
+                    return {'error': 'usuario nao encontrado'}, 404
+                db.session.delete(delete_usuario)
                 db.session.commit()
-                return 'vendedor deletado com sucesso', 200
+                return 'usuario deletado com sucesso', 200
             except Exception as e:
-                return {'error': 'erro ao atualizar o vendedor. Erro {}'.format(e)}, 400
+                return {'error': 'erro ao atualizar o usuario. Erro {}'.format(e)}, 400
