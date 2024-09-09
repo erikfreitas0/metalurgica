@@ -13,6 +13,11 @@ class usuario(db.Model):
         }
     codigo = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100))
+    cpf = db.Column(db.String(100))
+    email = db.Column(db.String(100))
+    telefone = db.Column(db.Integer(20))
+    senha = db.Column(db.String(100))
+    login = db.Column(db.String(100))
 
     def __init__(self, nome):
         self.nome = nome
