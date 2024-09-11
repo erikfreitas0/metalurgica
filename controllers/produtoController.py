@@ -1,6 +1,6 @@
 from flask import request, render_template
 from database.db import db
-from models.produto import produto
+from models.produto import Produto
 
 def produto_controller():
         if request.method == 'POST':

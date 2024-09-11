@@ -1,6 +1,6 @@
 from flask import request, render_template
 from database.db import db
-from models.vendedor import vendedor
+from models.vendedor import Vendedor
 
 def vendedor_controller():
         if request.method == 'POST':
