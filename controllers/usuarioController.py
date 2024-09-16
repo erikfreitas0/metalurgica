@@ -7,7 +7,7 @@ def usuario_controller():
             try:
                 data = request.get_json()
                 print(data)
-                user = usuario(data['nome'], data['cpf'], data['email'], data['telefone'], data['login'], data['senha'])
+                user = Usuario(data['nome'], data['cpf'], data['email'], data['telefone'], data['login'], data['senha'])
                 db.session.add(user)
                 db.session.commit()
                 return 'Usuário criado com sucesso', 200
@@ -16,7 +16,7 @@ def usuario_controller():
             
         elif request.method == 'GET':
             try:
-                data = usuario.query.all()
+                data = Usuario.query.all()
                 teste = {'usuarios': [usuario.to_dict() for usuario in data]}
                 return teste
             except Exception as e:
@@ -26,7 +26,7 @@ def usuario_controller():
             try:
                 data = request.get_json()
                 put_usuario_id = data['id']
-                put_usuario = usuario.query.get(put_usuario_id)
+                put_usuario = Usuario.query.get(put_usuario_id)
                 if put_usuario is None:
                     return {'error': 'usuario nao encontrado'}, 404
                 put_usuario.nome = data.get('nome', put_usuario.nome)
@@ -45,7 +45,7 @@ def usuario_controller():
             try:
                 data = request.get_json()
                 delete_usuario_id = data['id']
-                delete_usuario = usuario.query.get(delete_usuario_id)
+                delete_usuario = Usuario.query.get(delete_usuario_id)
                 if delete_usuario is None:
                     return {'error': 'usuario nao encontrado'}, 404
                 db.session.delete(delete_usuario)

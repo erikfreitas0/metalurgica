@@ -7,7 +7,7 @@ def vendedor_controller():
             try:
                 data = request.get_json()
                 print(data)
-                user = vendedor(data['nome'], data['login'], data['senha'])
+                user = Vendedor(data['nome'], data['login'], data['senha'])
                 db.session.add(user)
                 db.session.commit()
                 return 'vendedor criado com sucesso', 200
@@ -16,7 +16,7 @@ def vendedor_controller():
             
         elif request.method == 'GET':
             try:
-                data = vendedor.query.all()
+                data = Vendedor.query.all()
                 teste = {'vendedores': [vendedor.to_dict() for vendedor in data]}
                 return teste
             except Exception as e:
@@ -26,7 +26,7 @@ def vendedor_controller():
             try:
                 data = request.get_json()
                 put_vendedor_id = data['id']
-                put_vendedor = vendedor.query.get(put_vendedor_id)
+                put_vendedor = Vendedor.query.get(put_vendedor_id)
                 if put_vendedor is None:
                     return {'error': 'vendedor nao encontrado'}, 404
                 put_vendedor.nome = data.get('nome', put_vendedor.nome)
@@ -45,7 +45,7 @@ def vendedor_controller():
             try:
                 data = request.get_json()
                 delete_vendedor_id = data['id']
-                delete_vendedor = vendedor.query.get(delete_vendedor_id)
+                delete_vendedor = Vendedor.query.get(delete_vendedor_id)
                 if delete_vendedor is None:
                     return {'error': 'vendedor nao encontrado'}, 404
                 db.session.delete(delete_vendedor)

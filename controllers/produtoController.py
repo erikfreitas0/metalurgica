@@ -7,7 +7,7 @@ def produto_controller():
             try:
                 data = request.get_json()
                 print(data)
-                user = produto(data['tipo'], data['peso'], data['espessura'], data['durabilidade'], data['preco'])
+                user = Produto(data['tipo'], data['peso'], data['espessura'], data['durabilidade'], data['preco'])
                 db.session.add(user)
                 db.session.commit()
                 return 'Produto cadastrado com sucesso', 200
@@ -16,7 +16,7 @@ def produto_controller():
             
         elif request.method == 'GET':
             try:
-                data = produto.query.all()
+                data = Produto.query.all()
                 teste = {'produtos': [produto.to_dict() for produto in data]}
                 return teste
             except Exception as e:
@@ -26,7 +26,7 @@ def produto_controller():
             try:
                 data = request.get_json()
                 put_produto_codigo = data['codigo']
-                put_produto = produto.query.get(put_produto_codigo)
+                put_produto = Produto.query.get(put_produto_codigo)
                 if put_produto is None:
                     return {'error': 'produto nao encontrado. Erro {}'.format(e)}, 404
                 put_produto.tipo = data.get('tipo', put_produto.tipo)
@@ -44,7 +44,7 @@ def produto_controller():
             try:
                 data = request.get_json()
                 delete_produto_codigo = data['codigo']
-                delete_produto = produto.query.get(delete_produto_codigo)
+                delete_produto = Produto.query.get(delete_produto_codigo)
                 if delete_produto is None:
                     return {'error': 'produto nao encontrado'}, 404
                 db.session.delete(delete_produto)
