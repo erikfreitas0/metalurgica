@@ -7,7 +7,7 @@ def vendedor_controller():
             try:
                 data = request.get_json()
                 print(data)
-                user = Vendedor(data['nome'], data['login'], data['senha'])
+                user = Vendedor(data['nome'], data['cpf'], data['email'], data['telefone'], data['login'], data['senha'])
                 db.session.add(user)
                 db.session.commit()
                 return 'vendedor criado com sucesso', 200

@@ -9,7 +9,7 @@ class Produto(db.Model):
     durabilidade = db.Column(db.String(100))
     preco = db.Column(db.Float)
 
-    def __init__(self, tipo, peso, espessura, durabilidade, local, preco):
+    def __init__(self, tipo, peso, espessura, durabilidade, preco):
         self.tipo = tipo
         self.peso = peso
         self.espessura = espessura
