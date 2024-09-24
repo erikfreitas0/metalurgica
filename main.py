@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from database.db import db
 from flask_cors import CORS
 from routes.index import default_routes
@@ -13,6 +13,10 @@ class App:
 
     def run(self):
         return self.app.run(port=3000, host='localhost', debug=True)
+    
+def index():
+    # Renderiza o template HTML e passa variáveis
+    return render_template('index.html')
 
 app = App()
 app.run()
