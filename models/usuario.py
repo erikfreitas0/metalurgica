@@ -4,9 +4,9 @@ class Usuario(db.Model):
     # Definição das colunas
     codigo = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100))
-    cpf = db.Column(db.String(100))
+    cpf = db.Column(db.String(20))
     email = db.Column(db.String(100))
-    telefone = db.Column(db.String(20))  # Alterado para String para acomodar código de área e números
+    telefone = db.Column(db.String(10))  # Alterado para String para acomodar código de área e números
     senha = db.Column(db.String(100))
     login = db.Column(db.String(100))
 
