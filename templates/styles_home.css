@@ -13,13 +13,13 @@ body {
 
 h1, h2, h3 {
     font-weight: bold;
-    color: #004d40;
+    color: #dd0202;
 }
 
 /* Estilo do header - Seção Hero */
 .hero {
     height: 100vh;
-    background: url('https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNDg1MDB8MHwxfGFsbHwxfHx8fHx8fHwxNjM2NjE0NzQ1&ixlib=rb-1.2.1&q=80&w=1080') no-repeat center center/cover;
+    background: url('https://favorit.com.br/assets/images/curitiba.jpg') no-repeat center center/cover;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -33,6 +33,11 @@ h1, h2, h3 {
 
 .hero h1 {
     font-size: 3rem;
+    text-shadow: 
+      /*  -1px -1px 0 #000, Sombra para a esquerda e para cima */
+       /* 1px -1px 0 #000,   Sombra para a direita e para cima */
+       /* -1px 1px 0 #000,   Sombra para a esquerda e para baixo */
+        1px 1px 0 #000;   /* Sombra para a direita e para baixo */
 }
 
 .hero p {
@@ -41,7 +46,7 @@ h1, h2, h3 {
 }
 
 .btn {
-    background-color: #004d40;
+    background-color: #dd0202;
     color: white;
     padding: 15px 30px;
     text-decoration: none;
@@ -51,7 +56,7 @@ h1, h2, h3 {
 }
 
 .btn:hover {
-    background-color: #00332f;
+    background-color: #aa0101;
 }
 
 /* Estilo da Seção de Serviços */
@@ -94,7 +99,7 @@ h1, h2, h3 {
 /* Estilo da Chamada para Ação */
 .cta {
     padding: 50px 20px;
-    background-color: #004d40;
+    background-color: #dd0202;
     color: white;
     text-align: center;
 }
@@ -102,6 +107,7 @@ h1, h2, h3 {
 .cta h2 {
     font-size: 2.5rem;
     margin-bottom: 20px;
+    color: white;
 }
 
 .cta p {
@@ -110,8 +116,8 @@ h1, h2, h3 {
 }
 
 .cta-btn {
-    background-color: #fff;
-    color: #004d40;
+    background-color: #dd0202;
+    color: #fff;
     padding: 15px 30px;
     font-size: 1.1rem;
     border-radius: 30px;
@@ -127,6 +133,65 @@ h1, h2, h3 {
 footer {
     padding: 20px;
     text-align: center;
-    background-color: #00332f;
+    background-color: #aa0101;
     color: white;
 }
+
+
+ul {
+    list-style: none;
+}
+
+/* Cabeçalho */
+.main-header {
+    background-color: #dd0202;
+    color: white;
+    padding: 20px 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo h1 {
+    font-size: 1.8rem;
+    color: white;
+}
+
+.logo span {
+    color: white;
+}
+
+.main-nav ul {
+    display: flex;
+    gap: 20px;
+}
+
+.main-nav ul li a {
+    color: white;
+    font-size: 1.1rem;
+    transition: color 0.3s;
+}
+
+.main-nav ul li a:hover {
+    color: white;
+}
+
+/* Botão CTA */
+.cta-btn {
+    background-color: #aa0101;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+}
+
+.cta-btn:hover {
+    background-color: #810202;
+}
+
