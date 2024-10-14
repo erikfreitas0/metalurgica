@@ -43,6 +43,8 @@ h1, h2, h3 {
 .hero p {
     font-size: 1.5rem;
     margin: 20px 0;
+    text-shadow:
+        1px 1px 0 #000;
 }
 
 .btn {
