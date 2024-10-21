@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Metalúrgica Favorit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles_demandas.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1>Metalúrgica <span>Favorit</span></h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="home.html">Início</a></li>
+                    <li><a href="demandas.html">Demandas</a></li>
+                    <li><a href="informacoes.html">Sobre</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+            </nav>
+            <a href="demandas.html" class="btn cta-btn">Solicite um Orçamento</a>
+        </div>
+    </header>
+
+    <section class="cotacao-section">
+        <div class="container">
+            <h2>Preencha os detalhes da cotação</h2>
+            <form class="cotacao-form">
+                
+                <!-- Tipo de Metal -->
+                <div class="input-group">
+                    <label for="tipo">Tipo de Metal</label>
+                    <select id="tipo" name="tipo" required>
+                        <option value="">Selecione</option>
+                        <option value="ferro">Ferro</option>
+                        <option value="alumínio">Alumínio</option>
+                        <option value="cobre">Cobre</option>
+                        <option value="aço inoxidável">Aço Inoxidável</option>
+                    </select>
+                </div>
+
+                <!-- Peso -->
+                <div class="input-group">
+                    <label for="peso">Peso (kg)</label>
+                    <input type="number" id="peso" name="peso" placeholder="Ex: 50" required>
+                </div>
+
+                <!-- Espessura -->
+                <div class="input-group">
+                    <label for="espessura">Espessura (mm)</label>
+                    <input type="number" id="espessura" name="espessura" placeholder="Ex: 5" required>
+                </div>
+
+                <!-- Durabilidade -->
+                <div class="input-group">
+                    <label for="durabilidade">Durabilidade (anos)</label>
+                    <input type="number" id="durabilidade" name="durabilidade" placeholder="Ex: 10" required>
+                </div>
+
+                <!-- Preço -->
+                <div class="input-group">
+                    <label for="preco">Preço por kg (R$)</label>
+                    <input type="number" id="preco" name="preco" placeholder="Ex: 25.00" step="0.01" required>
+                </div>
+
+                <!-- Botão de Enviar -->
+                <div class="input-group">
+                    <button type="submit" class="submit-btn">Criar Cotação</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+
+</body>
