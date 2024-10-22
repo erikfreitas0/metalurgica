@@ -15,8 +15,12 @@ body {
 .main-header {
     background-color: #dd0202;
     color: white;
-    padding: 30px 0;
-    text-align: center;
+    padding: 20px 0;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .main-header h1 {
