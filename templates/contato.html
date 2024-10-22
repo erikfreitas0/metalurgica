@@ -30,60 +30,67 @@
         <div class="container">
             <h2>Fale Conosco</h2>
 
-            <!-- Formulário de Contato -->
-            <form class="contato-form">
-                
-                <!-- Container maior envolvendo os campos -->
-                <div class="input-group-container">
-
-                    <!-- Nome Completo -->
+            <!-- Layout Horizontal: Fale Conosco + Abas -->
+            <div class="top-section">
+                <!-- Formulário de Contato -->
+                <form class="contato-form">
                     <div class="input-group">
                         <label for="nome">Nome Completo</label>
                         <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
                     </div>
-
-                    <!-- E-mail -->
                     <div class="input-group">
                         <label for="email">E-mail</label>
                         <input type="email" id="email" name="email" placeholder="Seu e-mail" required>
                     </div>
-
-                    <!-- Telefone -->
                     <div class="input-group">
                         <label for="telefone">Telefone</label>
                         <input type="tel" id="telefone" name="telefone" placeholder="Seu telefone" required>
                     </div>
-
-                    <!-- Mensagem -->
                     <div class="input-group">
                         <label for="mensagem">Mensagem</label>
                         <textarea id="mensagem" name="mensagem" rows="6" placeholder="Sua mensagem" required></textarea>
                     </div>
+                </form>
 
-                </div>
-                
-                <!-- Botão de Enviar -->
-                <div class="input-group">
-                    <button type="submit" class="submit-btn">Enviar Mensagem</button>
-                </div>
-            </form>
+                <!-- Abas de Informações -->
+                <div class="tabs-section">
+                    <div class="tabs">
+                        <button class="tab-btn active" data-target="#whatsapp">WhatsApp</button>
+                        <button class="tab-btn" data-target="#instagram">Instagram</button>
+                    </div>
 
-            <!-- Abas de Informações -->
-            <div class="tabs">
-                <button class="tab-btn active" data-target="#whatsapp">WhatsApp</button>
-                <button class="tab-btn" data-target="#instagram">Instagram</button>
+                    <div class="tab-content">
+                        <div id="whatsapp" class="tab-pane active">
+                            <p><strong>WhatsApp:</strong> (11) 98765-4321</p>
+                        </div>
+                        <div id="instagram" class="tab-pane">
+                            <p><strong>Instagram:</strong> <a href="https://www.instagram.com/suametalurgica" target="_blank">@suametalurgica</a></p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="tab-content">
-                <div id="whatsapp" class="tab-pane active">
-                    <p><strong>WhatsApp:</strong> (11) 98765-4321</p>
-                </div>
-                <div id="instagram" class="tab-pane">
-                    <p><strong>Instagram:</strong> <a href="https://www.instagram.com/suametalurgica" target="_blank">@suametalurgica</a></p>
-                </div>
+            <!-- Seção de Entradas Horizontal -->
+            <div class="bottom-section">
+                <form class="horizontal-form">
+                    <div class="input-group">
+                        <label for="nome-horizontal">Nome</label>
+                        <input type="text" id="nome-horizontal" name="nome-horizontal" placeholder="Seu nome completo" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="email-horizontal">E-mail</label>
+                        <input type="email" id="email-horizontal" name="email-horizontal" placeholder="Seu e-mail" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="telefone-horizontal">Telefone</label>
+                        <input type="tel" id="telefone-horizontal" name="telefone-horizontal" placeholder="Seu telefone" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="mensagem-horizontal">Mensagem</label>
+                        <textarea id="mensagem-horizontal" name="mensagem-horizontal" rows="2" placeholder="Sua mensagem" required></textarea>
+                    </div>
+                </form>
             </div>
-        </div>
-    </section>
 
 </body>
 </html>
