@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Metalúrgica Favorit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles_home.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1>Metalúrgica <span>Favorit</span></h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="home.html">Início</a></li>
+                    <li><a href="demandas.html">Demandas</a></li>
+                    <li><a href="informacoes.html">Sobre</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+            </nav>
+            <a href="demandas.html" class="btn cta-btn">Solicite um Orçamento</a>
+        </div>
+    </header>
+
+    <section class="contato-section">
+        <div class="container">
+            <h2>Fale Conosco</h2>
+
+            <!-- Formulário de Contato -->
+            <form class="contato-form">
+                
+                <!-- Container maior envolvendo os campos -->
+                <div class="input-group-container">
+
+                    <!-- Nome Completo -->
+                    <div class="input-group">
+                        <label for="nome">Nome Completo</label>
+                        <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+                    </div>
+
+                    <!-- E-mail -->
+                    <div class="input-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" name="email" placeholder="Seu e-mail" required>
+                    </div>
+
+                    <!-- Telefone -->
+                    <div class="input-group">
+                        <label for="telefone">Telefone</label>
+                        <input type="tel" id="telefone" name="telefone" placeholder="Seu telefone" required>
+                    </div>
+
+                    <!-- Mensagem -->
+                    <div class="input-group">
+                        <label for="mensagem">Mensagem</label>
+                        <textarea id="mensagem" name="mensagem" rows="6" placeholder="Sua mensagem" required></textarea>
+                    </div>
+
+                </div>
+                
+                <!-- Botão de Enviar -->
+                <div class="input-group">
+                    <button type="submit" class="submit-btn">Enviar Mensagem</button>
+                </div>
+            </form>
+
+            <!-- Abas de Informações -->
+            <div class="tabs">
+                <button class="tab-btn active" data-target="#whatsapp">WhatsApp</button>
+                <button class="tab-btn" data-target="#instagram">Instagram</button>
+            </div>
+
+            <div class="tab-content">
+                <div id="whatsapp" class="tab-pane active">
+                    <p><strong>WhatsApp:</strong> (11) 98765-4321</p>
+                </div>
+                <div id="instagram" class="tab-pane">
+                    <p><strong>Instagram:</strong> <a href="https://www.instagram.com/suametalurgica" target="_blank">@suametalurgica</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
