@@ -19,7 +19,7 @@ h1, h2, h3 {
 /* Estilo do header - Seção Hero */
 .hero {
     height: 100vh;
-    background: url('https://favorit.com.br/assets/images/curitiba.jpg') no-repeat center center/cover;
+    background: url('fts/curitiba.jpg') no-repeat center center/cover;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,6 +55,7 @@ h1, h2, h3 {
     font-size: 1.1rem;
     border-radius: 30px;
     transition: background-color 0.3s;
+    object-fit: cover;
 }
 
 .btn:hover {
