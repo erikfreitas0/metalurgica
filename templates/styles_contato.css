@@ -15,7 +15,12 @@ body {
 .main-header {
     background-color: #dd0202;
     color: white;
-    padding: 20px 0;
+    padding: 21px 0;
+}
+
+.main-header h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
 }
 
 .container {
@@ -44,7 +49,13 @@ body {
     color: white;
     font-size: 1.1rem;
     transition: color 0.3s;
+    text-decoration: none;
 }
+
+.main-nav ul li {
+    list-style-type:none;
+}
+
 
 .cta {
     padding: 50px 20px;
@@ -67,7 +78,7 @@ body {
 .cta-btn {
     background-color: #aa0101;
     color: #fff;
-    padding: 10px 20px;
+    padding: 13px 20px;
     font-size: 1rem;
     border-radius: 20px;
     text-decoration: none;
@@ -81,7 +92,6 @@ body {
 /* Seção de Contato */
 .contato-section {
     padding: 40px 20px;
-    margin-top: 100px;
 }
 
 .container-contato {
@@ -236,3 +246,5 @@ body {
         flex-direction: column;
     }
 }
+
+

@@ -24,6 +24,13 @@ body {
     font-weight: 600;
 }
 
+.main-nav ul li a {
+    color: white;
+    font-size: 1.1rem;
+    transition: color 0.3s;
+    text-decoration: none;
+}
+
 /* Seção de Cotação */
 .cotacao-section {
     padding: 40px 20px;
