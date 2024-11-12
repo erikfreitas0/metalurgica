@@ -75,5 +75,36 @@
         </div>
     </section>
 
+    <script>
+        const API_URL = 'http://127.0.0.1:5000/metalurgica/produto'; // URL da API
+
+        // Função para criar uma nova cotação
+        document.getElementById('cotacaoForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            const tipo = document.getElementById('tipo').value;
+            const peso = document.getElementById('peso').value;
+            const espessura = document.getElementById('espessura').value;
+            const durabilidade = document.getElementById('durabilidade').value;
+            const preco = document.getElementById('preco').value;
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tipo, peso, espessura, durabilidade, preco })
+                });
+
+                if (response.ok) {
+                    alert('Produto cadastrado com sucesso');
+                } else {
+                    alert('Erro ao cadastrar produto');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+            }
+        });
+    </script>
+
 
 </body>
