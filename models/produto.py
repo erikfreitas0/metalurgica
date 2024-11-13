@@ -5,8 +5,8 @@ class Produto(db.Model):
     codigo = db.Column(db.Integer, primary_key=True)
     tipo = db.Column(db.String(100))
     peso = db.Column(db.Float)
-    espessura = db.Column(db.String(100))
-    durabilidade = db.Column(db.String(100))
+    espessura = db.Column(db.Float)
+    durabilidade = db.Column(db.Float)
     preco = db.Column(db.Float)
 
     def __init__(self, tipo, peso, espessura, durabilidade, preco):
