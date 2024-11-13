@@ -29,7 +29,7 @@
     <section class="cotacao-section">
         <div class="container">
             <h2>Preencha os detalhes da cotação</h2>
-            <form class="cotacao-form">
+            <form class="cotacao-form" id="cotacao-form">
                 
                 <!-- Tipo de Metal -->
                 <div class="input-group">
@@ -76,35 +76,35 @@
     </section>
 
     <script>
-        const API_URL = 'http://127.0.0.1:5000/metalurgica/produto'; // URL da API
+        document.addEventListener('DOMContentLoaded', () => {
+            const API_URL = 'http://localhost:3000/metalurgica/produto';
 
-        // Função para criar uma nova cotação
-        document.getElementById('cotacaoForm').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            
-            const tipo = document.getElementById('tipo').value;
-            const peso = document.getElementById('peso').value;
-            const espessura = document.getElementById('espessura').value;
-            const durabilidade = document.getElementById('durabilidade').value;
-            const preco = document.getElementById('preco').value;
+            document.getElementById('cotacao-form').addEventListener('submit', async (event) => {
+                event.preventDefault();
+                
+                const tipo = document.getElementById('tipo').value;
+                const peso = document.getElementById('peso').value;
+                const espessura = document.getElementById('espessura').value;
+                const durabilidade = document.getElementById('durabilidade').value;
+                const preco = document.getElementById('preco').value;
 
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ tipo, peso, espessura, durabilidade, preco })
-                });
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ tipo, peso, espessura, durabilidade, preco })
+                    });
 
-                if (response.ok) {
-                    alert('Produto cadastrado com sucesso');
-                } else {
-                    alert('Erro ao cadastrar produto');
+                    if (response.ok) {
+                        alert('Produto cadastrado com sucesso');
+                    } else {
+                        alert('Erro ao cadastrar produto');
+                    }
+                } catch (error) {
+                    console.error('Erro:', error);
                 }
-            } catch (error) {
-                console.error('Erro:', error);
-            }
+            });
         });
     </script>
-
-
 </body>
+</html>
