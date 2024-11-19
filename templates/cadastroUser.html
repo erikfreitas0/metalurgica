@@ -27,8 +27,8 @@
                 <input type="tel" id="telefone" maxlength="15" required>
             </div>
             <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" required>
+                <label for="login">Username:</label>
+                <input type="text" id="login" required>
             </div>
             <div class="form-group">
                 <label for="senha">Senha:</label>
@@ -69,6 +69,55 @@
         telefoneInput.addEventListener("input", (e) => {
             e.target.value = formatarTelefone(e.target.value);
         });
+
+        document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        // Captura os dados do formulário
+        const nome = document.getElementById('nome').value;
+        const cpf = document.getElementById('cpf').value;
+        const email = document.getElementById('email').value;
+        const telefone = document.getElementById('telefone').value;
+        const username = document.getElementById('login').value;
+        const senha = document.getElementById('senha').value;
+
+        const API_URL = 'http://localhost:3000/metalurgica/usuario'; // Ajuste para o endpoint correto da sua API
+
+        try {
+            // Envia os dados para a API
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    nome,
+                    cpf,
+                    email,
+                    telefone,
+                    login,
+                    senha,
+                }),
+            });
+
+            // Trata a resposta da API
+                        const responseText = await response.text(); // Lê a resposta como texto
+
+            if (response.ok) {
+                alert(responseText); // Exibe a mensagem retornada
+            } else {
+                alert(`Erro ao cadastrar usuário: ${responseText}`);
+            }
+
+        } catch (error) {
+            console.error('Erro ao conectar com a API:', error);
+            alert('Não foi possível cadastrar o usuário.');
+        }
+    });
+});
     </script>
 </body>
 </html>
