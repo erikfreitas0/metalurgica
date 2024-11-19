@@ -16,7 +16,7 @@
             </div>
             <div class="form-group">
                 <label for="cpf">CPF:</label>
-                <input type="text" id="cpf" required>
+                <input type="text" id="cpf" maxlength="14" required>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label for="telefone">Telefone:</label>
-                <input type="tel" id="telefone" required>
+                <input type="tel" id="telefone" maxlength="15" required>
             </div>
             <div class="form-group">
                 <label for="username">Username:</label>
@@ -38,7 +38,37 @@
         </form>
         <p class="login-user">Já possui um cadastro? <a href="loginUser.html"> Faça seu Login aqui</a></p>
         <p class="vendedor-link">Você é um vendedor? <a href="cadastroVendedor.html">Cadastre-se aqui</a></p>
-        </form>
     </div>
+
+    <script>
+        // Função para formatar CPF
+        function formatarCPF(cpf) {
+            cpf = cpf.replace(/\D/g, ""); // Remove caracteres não numéricos
+            cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
+            cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
+            cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+            return cpf;
+        }
+
+        // Função para formatar Telefone
+        function formatarTelefone(telefone) {
+            telefone = telefone.replace(/\D/g, ""); // Remove caracteres não numéricos
+            telefone = telefone.replace(/^(\d{2})(\d)/g, "($1) $2");
+            telefone = telefone.replace(/(\d{4,5})(\d{4})$/, "$1-$2");
+            return telefone;
+        }
+
+        // Event listener para CPF
+        const cpfInput = document.getElementById("cpf");
+        cpfInput.addEventListener("input", (e) => {
+            e.target.value = formatarCPF(e.target.value);
+        });
+
+        // Event listener para Telefone
+        const telefoneInput = document.getElementById("telefone");
+        telefoneInput.addEventListener("input", (e) => {
+            e.target.value = formatarTelefone(e.target.value);
+        });
+    </script>
 </body>
 </html>
