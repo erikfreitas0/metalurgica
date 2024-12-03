@@ -7,7 +7,7 @@ def produto_controller():
             try:
                 data = request.get_json()
                 print(data)
-                user = Produto(data['tipo'], data['peso'], data['espessura'], data['durabilidade'], data['preco'])
+                user = Produto(data['tipo'], data['peso'], data['espessura'],  data['preco'])
                 db.session.add(user)
                 db.session.commit()
                 return 'Produto cadastrado com sucesso', 200
@@ -32,9 +32,8 @@ def produto_controller():
                 put_produto.tipo = data.get('tipo', put_produto.tipo)
                 put_produto.peso = data.get('peso', put_produto.peso)
                 put_produto.espessura = data.get('espessura', put_produto.espessura)
-                put_produto.durabilidade = data.get('durabilidade', put_produto.durabilidade)
                 put_produto.preco = data.get('preco', put_produto.preco)
-                print(put_produto.tipo, put_produto.peso, put_produto.espessura, put_produto.durabilidade, put_produto.preco)
+                print(put_produto.tipo, put_produto.peso, put_produto.espessura, put_produto.preco)
                 db.session.commit()
                 return 'produto atualizado com sucesso', 200
             except Exception as e:

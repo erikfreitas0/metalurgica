@@ -55,12 +55,6 @@
                     <input type="number" id="espessura" name="espessura" placeholder="Ex: 5" required>
                 </div>
 
-                <!-- Durabilidade -->
-                <div class="input-group">
-                    <label for="durabilidade">Durabilidade (anos)</label>
-                    <input type="number" id="durabilidade" name="durabilidade" placeholder="Ex: 10" required>
-                </div>
-
                 <!-- Preço -->
                 <div class="input-group">
                     <label for="preco">Preço por kg (R$)</label>
@@ -85,14 +79,13 @@
                 const tipo = document.getElementById('tipo').value;
                 const peso = document.getElementById('peso').value;
                 const espessura = document.getElementById('espessura').value;
-                const durabilidade = document.getElementById('durabilidade').value;
                 const preco = document.getElementById('preco').value;
 
                 try {
                     const response = await fetch(API_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ tipo, peso, espessura, durabilidade, preco })
+                        body: JSON.stringify({ tipo, peso, espessura, preco })
                     });
 
                     if (response.ok) {

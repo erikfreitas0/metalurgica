@@ -6,14 +6,12 @@ class Produto(db.Model):
     tipo = db.Column(db.String(100))
     peso = db.Column(db.Float)
     espessura = db.Column(db.Float)
-    durabilidade = db.Column(db.Float)
     preco = db.Column(db.Float)
 
-    def __init__(self, tipo, peso, espessura, durabilidade, preco):
+    def __init__(self, tipo, peso, espessura, preco):
         self.tipo = tipo
         self.peso = peso
         self.espessura = espessura
-        self.durabilidade = durabilidade
         self.preco = preco 
 
     def to_dict(self):
@@ -22,6 +20,5 @@ class Produto(db.Model):
             'tipo': self.tipo,
             'peso': self.peso,
             'espessura': self.espessura,
-            'durabilidade': self.durabilidade,
             'preco': self.preco
         }
