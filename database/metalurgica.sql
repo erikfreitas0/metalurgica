@@ -30,9 +30,7 @@ CREATE TABLE IF NOT EXISTS `produto` (
   `codigo` int(100) NOT NULL AUTO_INCREMENT,
   `tipo` varchar(50) NOT NULL,
   `peso` float(10,2) NOT NULL,
-  `local` varchar(100) NOT NULL,
   `espessura` varchar(50) NOT NULL,
-  `durabilidade` varchar(50) NOT NULL,
   `preco` float(10,2) NOT NULL,
   PRIMARY KEY (`codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -77,6 +75,19 @@ CREATE TABLE IF NOT EXISTS `vendedor` (
   `login` varchar(50) NOT NULL,
   `senha` varchar(20) NOT NULL,
   `telefone` varchar(20) NOT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+CREATE TABLE IF NOT EXISTS `mensagem` (
+  `codigo` int(5) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `telefone` varchar(20) NOT NULL,
+  `mensagem` varchar(200) NOT NULL,
   PRIMARY KEY (`codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 

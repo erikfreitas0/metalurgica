@@ -32,7 +32,7 @@
             <!-- Layout Horizontal: Fale Conosco + Abas -->
             <div class="top-section">
                 <!-- Formulário de Contato -->
-                <form class="contato-form">
+                <form class="contato-form" onsubmit="enviarMensagem(event)">
                     <div class="input-group">
                         <label for="nome">Nome Completo</label>
                         <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
@@ -49,7 +49,9 @@
                         <label for="mensagem">Mensagem</label>
                         <textarea id="mensagem" name="mensagem" rows="6" placeholder="Sua mensagem" required></textarea>
                     </div>
+                    <button type="submit">Enviar</button>
                 </form>
+                
 
                 <!-- Abas de Informações -->
                 <div class="tabs-section">
@@ -70,7 +72,52 @@
             </div>
 
             <script>
-        
+                const API_URL = 'http://localhost:3000/metalurgica/mensagens'; // Ajuste para o endpoint correto da sua API
+            
+                async function enviarMensagem(event) {
+                    event.preventDefault(); // Previne o recarregamento da página ao enviar o formulário
+            
+                    // Captura os dados do formulário
+                    const nome = document.getElementById('nome').value;
+                    const email = document.getElementById('email').value;
+                    const telefone = document.getElementById('telefone').value;
+                    const mensagem = document.getElementById('mensagem').value;
+            
+                    try {
+                        // Envia os dados para a API
+                        const response = await fetch(API_URL, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                nome: nome,
+                                email: email,
+                                telefone: telefone,
+                                mensagem: mensagem,
+                            }),
+                        });
+            
+                        // Verifica a resposta
+                        const responseText = await response.text();
+            
+                        if (response.ok) {
+                            alert('Mensagem enviada com sucesso!');
+                            // Limpa os campos do formulário
+                            document.querySelector('.contato-form').reset();
+                        } else {
+                            alert(`Erro ao enviar mensagem: ${responseText}`);
+                        }
+                    } catch (error) {
+                        console.error('Erro ao conectar com a API:', error);
+                        alert('Não foi possível enviar a mensagem.');
+                    }
+                }
+            </script>
+            
+            <script>
+                
+
                 // Função para formatar Telefone
                 function formatarTelefone(telefone) {
                     telefone = telefone.replace(/\D/g, ""); // Remove caracteres não numéricos

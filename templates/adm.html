@@ -14,7 +14,7 @@
         <main>
             <div class="buttons">
                 <button id="btnCotacoes">Cotações</button>
-                <button id="btnMensagens">Mensagens</button>
+                <button id="btnMensagens">Mensagems</button>
             </div>
             <div id="content">
                 <!-- Conteúdo dinâmico será exibido aqui -->
@@ -26,8 +26,8 @@
     </div>
 
     <script>
-        const API_COTACOES = 'http://localhost:3000/metalurgica/demandas'; // Ajuste para o endpoint correto
-        const API_MENSAGENS = 'http://localhost:3000/metalurgica/mensagens'; // Ajuste para o endpoint correto
+        const API_COTACOES = 'http://localhost:3000/metalurgica/produto'; // Ajuste para o endpoint correto
+        const API_MENSAGENS = 'http://localhost:3000/metalurgica/mensagem'; // Ajuste para o endpoint correto
 
         const btnCotacoes = document.getElementById('btnCotacoes');
         const btnMensagens = document.getElementById('btnMensagens');
@@ -49,37 +49,40 @@
         // Exibe cotações no conteúdo
         btnCotacoes.addEventListener('click', async () => {
             contentDiv.innerHTML = '<h2>Cotações</h2>';
-            const demandas = await fetchData(API_COTACOES);
-            if (demandas.length === 0) {
+            const produto = await fetchData(API_COTACOES);
+            if (produto.length === 0) {
                 contentDiv.innerHTML += '<p>Nenhuma cotação encontrada.</p>';
             } else {
-                demandas.forEach((demanda) => {
+                produto.forEach((produto) => {
                     const container = document.createElement('div');
                     container.className = 'item';
                     container.innerHTML = `
-                        <h3>Demanda: ${demanda.nomeProduto}</h3>
-                        <p><strong>Quantidade:</strong> ${demanda.quantidade}</p>
-                        <p><strong>Preço:</strong> R$ ${demanda.preco}</p>
+                        <h3>Demanda: ${produto.codigo}</h3>
+                        <p><strong>Tipo:</strong> ${produto.tipo}</p>
+                        <p><strong>Peso:</strong> ${produto.peso}</p>
+                        <p><strong>Espessura:</strong> ${produto.espessura}</p>
+                        <p><strong>Preço:</strong> R$ ${produto.preco}</p>
                     `;
                     contentDiv.appendChild(container);
                 });
             }
         });
 
-        // Exibe mensagens no conteúdo
+        // Exibe mensagems no conteúdo
         btnMensagens.addEventListener('click', async () => {
-            contentDiv.innerHTML = '<h2>Mensagens</h2>';
-            const mensagens = await fetchData(API_MENSAGENS);
-            if (mensagens.length === 0) {
+            contentDiv.innerHTML = '<h2>Mensagems</h2>';
+            const mensagems = await fetchData(API_MENSAGENS);
+            if (mensagems.length === 0) {
                 contentDiv.innerHTML += '<p>Nenhuma mensagem encontrada.</p>';
             } else {
-                mensagens.forEach((mensagem) => {
+                mensagems.forEach((mensagem) => {
                     const container = document.createElement('div');
                     container.className = 'item';
                     container.innerHTML = `
-                        <h3>De: ${mensagem.remetente}</h3>
-                        <p><strong>Assunto:</strong> ${mensagem.assunto}</p>
-                        <p>${mensagem.conteudo}</p>
+                        <h3>De: ${mensagem.nome}</h3>
+                        <p><strong>E-mail:</strong> ${mensagem.email}</p>
+                        <p><strong>Telefone:</strong> ${mensagem.telefone}</p>
+                        <p>${mensagem.mensagem}</p>
                     `;
                     contentDiv.appendChild(container);
                 });
