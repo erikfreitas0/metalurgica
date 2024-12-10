@@ -72,7 +72,8 @@
             </div>
 
             <script>
-                const API_URL = 'http://localhost:3000/metalurgica/mensagem'; // Ajuste para o endpoint correto da sua API
+                // URL da API
+                const API_URL = 'http://localhost:3000/metalurgica/mensagem';
             
                 async function enviarMensagem(event) {
                     event.preventDefault(); // Previne o recarregamento da página ao enviar o formulário
@@ -82,6 +83,12 @@
                     const email = document.getElementById('email').value;
                     const telefone = document.getElementById('telefone').value;
                     const mensagem = document.getElementById('mensagem').value;
+            
+                    // Validação básica no frontend
+                    if (!nome || !email || !telefone || !mensagem) {
+                        alert('Por favor, preencha todos os campos.');
+                        return;
+                    }
             
                     try {
                         // Envia os dados para a API
@@ -98,26 +105,24 @@
                             }),
                         });
             
-                        // Verifica a resposta
-                        const responseText = await response.text();
-            
+                        // Verifica o status da resposta
                         if (response.ok) {
+                            const responseText = await response.text();
                             alert('Mensagem enviada com sucesso!');
-                            // Limpa os campos do formulário
                             document.querySelector('.contato-form').reset();
                         } else {
-                            alert(`Erro ao enviar mensagem: ${responseText}`);
+                            const errorText = await response.text();
+                            alert(`Erro ao enviar mensagem: ${errorText}`);
                         }
                     } catch (error) {
                         console.error('Erro ao conectar com a API:', error);
-                        alert('Não foi possível enviar a mensagem.');
+                        alert('Não foi possível enviar a mensagem. Verifique sua conexão e tente novamente.');
                     }
                 }
             </script>
             
+            
             <script>
-                
-
                 // Função para formatar Telefone
                 function formatarTelefone(telefone) {
                     telefone = telefone.replace(/\D/g, ""); // Remove caracteres não numéricos
