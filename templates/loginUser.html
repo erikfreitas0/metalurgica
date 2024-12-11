@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>Login de Cliente</h1>
-        <form>
+        <form onsubmit="fazerLogin(event)">
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" id="email" required>
@@ -25,7 +25,57 @@
             <button type="submit">Login</button>
         </form>
         <p class="cliente-link">Não tem uma conta? <a href="cadastroUser.html">Cadastre-se aqui</a></p>
-        </form>
     </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/usuario'; // Substitua pelo seu endpoint de login
+
+        async function fazerLogin(event) {
+            event.preventDefault(); // Previne o recarregamento da página
+
+            // Captura os dados do formulário
+            const email = document.getElementById('email').value;
+            const login = document.getElementById('login').value;
+            const senha = document.getElementById('senha').value;
+
+            // Validação básica no frontend
+            if (!email || !login || !senha) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        login: login,
+                        senha: senha,
+                    }),
+                });
+
+                // Verifica o status da resposta
+                if (response.ok) {
+                    const responseData = await response.json();
+                    if (responseData.sucesso) {
+                        alert('Login bem-sucedido!');
+                        // Redireciona para outra página após o login bem-sucedido
+                        window.location.href = 'pagina_inicial.html'; // Substitua pela sua página inicial
+                    } else {
+                        alert('Usuário ou senha incorretos.');
+                    }
+                } else {
+                    const errorText = await response.text();
+                    alert(`Erro ao fazer login: ${errorText}`);
+                }
+            } catch (error) {
+                console.error('Erro ao conectar com a API:', error);
+                alert('Não foi possível fazer o login. Verifique sua conexão e tente novamente.');
+            }
+        }
+    </script>
 </body>
 </html>
