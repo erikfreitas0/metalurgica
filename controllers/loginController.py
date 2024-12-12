@@ -1,9 +1,10 @@
 from flask import request, jsonify
 from models.usuario import Usuario
+from models.vendedor import Vendedor
 from database.db import db
 
 
-def login_usuario():
+def login_controller():
     if request.method == 'POST':
         data = request.get_json()
         login = data.get('login')
@@ -11,10 +12,16 @@ def login_usuario():
 
         # Tente encontrar um usuário com as credenciais fornecidas
         usuario = Usuario.query.filter_by(login=login, senha=senha).first()
+        vendedor = Vendedor.query.filter_by(login=login, senha=senha).first()
 
         if usuario:
             # Usuário encontrado com sucesso
             return jsonify({"message": "Login realizado com sucesso!"}), 200
+        
+        elif vendedor:
+             # Usuário encontrado com sucesso
+            return jsonify({"message": "Login realizado com sucesso!"}), 200
+        
         else:
             # Credenciais inválidas
             return jsonify({"error": "Credenciais inválidas!"}), 401

@@ -10,8 +10,7 @@ class Usuario(db.Model):
     login = db.Column(db.String(100))  # Alterado para String para acomodar código de área e números
     senha = db.Column(db.String(100))
     
-
-    def __init__(self, nome, cpf, email, telefone, senha, login):
+    def __init__(self, nome, cpf, email, telefone, login, senha):
         self.nome = nome
         self.cpf = cpf
         self.email = email

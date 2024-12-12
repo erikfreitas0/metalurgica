@@ -9,11 +9,7 @@
 <body>
     <div class="container">
         <h1>Login de Vendedor</h1>
-        <form>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" required>
-            </div>
+        <form id="loginForm" onsubmit="loginVendedor(event)">
             <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" id="username" required>
@@ -25,7 +21,45 @@
             <button type="submit">Login</button>
         </form>
         <p class="vendedor-link">Não tem uma conta? <a href="cadastroVendedor.html">Cadastre-se aqui</a></p>
-        </form>
     </div>
+
+    <script>
+       async function loginVendedor(event) {
+    event.preventDefault();
+
+    const login = document.getElementById("username").value;
+    const senha = document.getElementById("senha").value;
+
+    if (!login || !senha) {
+        alert("Por favor, preencha todos os campos.");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:3000/metalurgica/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ login, senha }),
+        });
+
+        // Verifica o status da resposta
+        if (response.ok) {
+            const data = await response.json();
+            alert(data.message);  // Mostra a mensagem de sucesso
+            window.location.href = "adm.html";  // Redireciona para a página adm
+        } else {
+            const errorData = await response.json();
+            alert(`Erro: ${errorData.error}`);
+        }
+    } catch (error) {
+        console.error("Erro ao conectar com o servidor:", error);
+        alert("Erro ao conectar com o servidor. Tente novamente.");
+    }
+}
+
+
+    </script>
 </body>
 </html>
