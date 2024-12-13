@@ -38,56 +38,50 @@ CREATE TABLE IF NOT EXISTS `mensagem` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `produto`
---
-
-CREATE TABLE IF NOT EXISTS `produto` (
-  `codigo` int(100) NOT NULL AUTO_INCREMENT,
-  `tipo` varchar(50) NOT NULL,
-  `peso` float(10,2) NOT NULL,
-  `espessura` float(10,2) NOT NULL,
-  `preco` float(10,2) NOT NULL,
-  PRIMARY KEY (`codigo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
-
---
--- Extraindo dados da tabela `produto`
---
-
-INSERT INTO `produto` (`codigo`, `tipo`, `peso`, `espessura`, `preco`) VALUES
-(9, 'ferro', 50.00, 5.00, 25.00),
-(10, 'ferro', 62.00, 8.00, 32.00),
-(11, 'aço inoxidável', 40.00, 3.00, 41.00),
-(12, 'alumínio', 90.00, 60.00, 35.00);
-
--- --------------------------------------------------------
-
---
 -- Estrutura da tabela `usuario`
 --
 
 CREATE TABLE IF NOT EXISTS `usuario` (
-  `codigo` int(5) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(100) NOT NULL,
-  `cpf` varchar(50) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `telefone` varchar(20) NOT NULL,
-  `login` varchar(50) NOT NULL,
-  `senha` varchar(50) NOT NULL,
-  PRIMARY KEY (`codigo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+  `codigo` INT NOT NULL AUTO_INCREMENT, -- ID do usuário
+  `nome` VARCHAR(100) NOT NULL,
+  `cpf` VARCHAR(50) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `telefone` VARCHAR(20) NOT NULL,
+  `login` VARCHAR(50) NOT NULL,
+  `senha` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`codigo`) -- Definir 'codigo' como chave primária
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 --
 -- Extraindo dados da tabela `usuario`
 --
 
 INSERT INTO `usuario` (`codigo`, `nome`, `cpf`, `email`, `telefone`, `login`, `senha`) VALUES
-(4, 'erik de freitas', '145.670.799-06', 'erikdefreitas5@gmail.com', '(48) 99122-5312', '123', 'erik'),
-(5, 'gilson de freitas', '645.638.639-04', 'gilferacos@hotmail.com', '(48) 99984-5183', 'dido6919', 'dido'),
-(6, 'pedro venicio', '123.456.789-10', 'pvviadao@gmail.com', '(48) 58899-4521', '123', 'pvgay'),
-(7, 'eduardo samuel', '123.456.789-11', 'duducorinthians@gmail.com', '(48) 58899-4785', '123', 'dudu');
+(4, 'erik de freitas', '145.670.799-06', 'erikdefreitas5@gmail.com', '(48) 99122-5312', 'erik', '123'),
+(5, 'gilson de freitas', '645.638.639-04', 'gilferacos@hotmail.com', '(48) 99984-5183', 'dido', 'dido'),
+(6, 'pedro venicio', '123.456.789-10', 'pvviadao@gmail.com', '(48) 58899-4521', 'pv', '123'),
+(7, 'eduardo samuel', '123.456.789-11', 'duducorinthians@gmail.com', '(48) 58899-4785', 'dudu', '123');
 
 -- --------------------------------------------------------
+--
+-- Estrutura da tabela `produto`
+CREATE TABLE IF NOT EXISTS `produto` (
+  `codigo` INT NOT NULL AUTO_INCREMENT, -- ID do produto
+  `usuario_id` INT NOT NULL, -- Referencia o ID do usuário
+  `tipo` VARCHAR(50) NOT NULL,
+  `peso` FLOAT(10, 2) NOT NULL,
+  `espessura` FLOAT(10, 2) NOT NULL,
+  `preco` DECIMAL(10, 2) NULL,
+  `status` VARCHAR(20) DEFAULT 'Pendente',
+  `data_criacao` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`codigo`),
+  FOREIGN KEY (`usuario_id`) REFERENCES `usuario`(`codigo`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
 
 --
 -- Estrutura da tabela `vendedor`
