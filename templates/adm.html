@@ -25,7 +25,7 @@
     </div>
 
     <script>
-        const API_COTACOES = 'http://localhost:3000/metalurgica/produto'; // Ajuste para o endpoint correto
+        const API_COTACOES = 'http://localhost:3000/metalurgica/produto'; // URL da API
         const btnCotacoes = document.getElementById('btnCotacoes');
         const contentDiv = document.getElementById('content');
 
@@ -34,7 +34,7 @@
             try {
                 const response = await fetch(apiUrl);
                 const data = await response.json();
-                console.log('Dados recebidos da API:', data); // Exibe a resposta no console
+                console.log('Dados recebidos da API:', data);
                 return data;
             } catch (error) {
                 console.error('Erro ao buscar dados:', error);
@@ -42,27 +42,25 @@
             }
         }
 
-        // Exibe cotações no conteúdo
+        // Função para exibir cotações no conteúdo
         btnCotacoes.addEventListener('click', async () => {
             contentDiv.innerHTML = '<h2>Cotações</h2>';
             const data = await fetchData(API_COTACOES);
 
-            // Valide o formato recebido
-            const produto = Array.isArray(data) ? data : data.produtos || []; // Ajuste conforme o formato real
-
-            if (produto.length === 0) {
+            const produtos = Array.isArray(data.produtos) ? data.produtos : [];
+            if (produtos.length === 0) {
                 contentDiv.innerHTML += '<p>Nenhuma cotação encontrada.</p>';
             } else {
-                produto.forEach((produto) => {
+                produtos.forEach((produto) => {
                     const container = document.createElement('div');
                     container.className = 'produto';
                     container.innerHTML = `
-                        <h3>Demanda: ${produto.codigo}</h3>
+                        <h3>Produto: ${produto.codigo}</h3>
                         <p><strong>Tipo:</strong> ${produto.tipo}</p>
                         <p><strong>Peso:</strong> ${produto.peso} kg</p>
                         <p><strong>Espessura:</strong> ${produto.espessura} mm</p>
                         <p><strong>Preço:</strong> 
-                            <input type="number" id="preco_${produto.codigo}" value="${produto.preco !== null ? produto.preco : ''}" min="0" step="0.01" />
+                            <input type="number" id="preco_${produto.codigo}" value="${produto.preco || 0}" min="0" step="0.01" />
                         </p>
                         <p><strong>Status:</strong> 
                             <select id="status_${produto.codigo}">
@@ -74,27 +72,20 @@
                     `;
                     contentDiv.appendChild(container);
 
-                    // Permitir edição do preço
+                    // Atualizar preço
                     const precoInput = document.getElementById(`preco_${produto.codigo}`);
-                    precoInput.addEventListener('change', async (e) => {
-                        const preco = parseFloat(e.target.value);
+                    precoInput.addEventListener('change', async () => {
+                        const preco = parseFloat(precoInput.value);
                         if (isNaN(preco) || preco < 0) {
                             alert('Preço inválido. Insira um valor numérico válido.');
                             return;
                         }
-
-                        // Enviar preço alterado para o servidor
                         try {
-                            const response = await fetch(`${API_COTACOES}/${produto.codigo}`, {  // A URL está correta aqui
+                            const response = await fetch(`${API_COTACOES}/${produto.codigo}`, {
                                 method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({
-                                    preco: preco
-                                })
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ preco })
                             });
-
                             if (response.ok) {
                                 alert('Preço atualizado com sucesso!');
                             } else {
@@ -106,23 +97,16 @@
                         }
                     });
 
-                    // Permitir mudança de status
+                    // Atualizar status
                     const statusSelect = document.getElementById(`status_${produto.codigo}`);
-                    statusSelect.addEventListener('change', async (e) => {
-                        const novoStatus = e.target.value;
-
-                        // Enviar o status alterado para o servidor
+                    statusSelect.addEventListener('change', async () => {
+                        const novoStatus = statusSelect.value;
                         try {
-                            const response = await fetch(`${API_COTACOES}/${produto.codigo}`, {  // A URL está correta aqui
+                            const response = await fetch(`${API_COTACOES}/${produto.codigo}`, {
                                 method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({
-                                    status: novoStatus
-                                })
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ status: novoStatus })
                             });
-
                             if (response.ok) {
                                 alert('Status atualizado com sucesso!');
                             } else {

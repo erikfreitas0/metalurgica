@@ -3,21 +3,50 @@ from database.db import db
 from models.produto import Produto
 from models.usuario import Usuario
 
+from flask import request, jsonify
+
+def atualizar_produto(produto_id):
+    """
+    Atualiza os campos de um produto com base no ID e nos dados fornecidos.
+    """
+    try:
+        # Pega os dados do corpo da requisição
+        data = request.get_json()
+
+        produto = Produto.query.get(produto_id)
+        if not produto:
+            return jsonify({'error': 'Produto não encontrado'}), 404
+
+        # Atualiza os campos fornecidos
+        if 'preco' in data:
+            if not isinstance(data['preco'], (int, float)):
+                return jsonify({'error': 'O preço deve ser um valor numérico válido.'}), 400
+            produto.preco = data['preco']
+
+        if 'status' in data:
+            if not isinstance(data['status'], str):
+                return jsonify({'error': 'O status deve ser um texto válido.'}), 400
+            produto.status = data['status']
+
+        # Commit das alterações
+        db.session.commit()
+        return jsonify({'message': 'Produto atualizado com sucesso'}), 200
+
+    except Exception as e:
+        db.session.rollback()  # Rollback em caso de erro
+        print(f"Erro ao atualizar produto: {str(e)}")  # Log para depuração
+        return jsonify({'error': f'Erro ao atualizar o produto: {str(e)}'}), 500
+
+
 def produto_controller():
     if request.method == 'POST':
         try:
             data = request.get_json()
-            
-            if data.get('usuario_id') is None:
-                return jsonify({'error': 'Usuário não autenticado. Por favor, faça login.'}), 400
 
-            print(data)
-
-            # Verificação de dados obrigatórios
-            if 'usuario_id' not in data or 'tipo' not in data or 'peso' not in data or 'espessura' not in data:
+            # Validação de campos obrigatórios
+            if not all(k in data for k in ('usuario_id', 'tipo', 'peso', 'espessura')):
                 return jsonify({'error': 'Campos obrigatórios faltando: usuario_id, tipo, peso, espessura'}), 400
 
-            # Verificação de tipos numéricos
             if not isinstance(data['peso'], (int, float)) or not isinstance(data['espessura'], (int, float)):
                 return jsonify({'error': 'Peso e espessura devem ser numéricos'}), 400
 
@@ -32,14 +61,14 @@ def produto_controller():
                 tipo=data['tipo'],
                 peso=data['peso'],
                 espessura=data['espessura'],
-                preco=data.get('preco', 0.0),  # Definir preço padrão como 0.0
+                preco=data.get('preco', 0.0),  # Preço padrão 0.0
                 status=data.get('status', 'Pendente')
             )
             db.session.add(produto)
             db.session.commit()
             return jsonify({'message': 'Produto cadastrado com sucesso'}), 200
         except Exception as e:
-            db.session.rollback()  # Rollback em caso de erro
+            db.session.rollback()
             print(f"Erro: {e}")
             return jsonify({'error': f'O produto não foi cadastrado: {str(e)}'}), 400
 
@@ -52,26 +81,22 @@ def produto_controller():
 
     elif request.method == 'PUT':
         try:
-            # Pega o ID do produto da URL
-            produto_id = request.view_args['produto_id']  # Extrai o ID da URL
+            # Obtém o ID do produto da query string
+            produto_id = request.args.get('produto_id', type=int)
+            if not produto_id:
+                return jsonify({'error': 'ID do produto não fornecido na URL'}), 400
+
+            # Obtém os dados do corpo da requisição
             data = request.get_json()
+            if not isinstance(data, dict):
+                return jsonify({'error': 'Dados enviados no formato incorreto. Deve ser um JSON válido.'}), 400
 
-            produto = Produto.query.get(produto_id)
-            if not produto:
-                return jsonify({'error': 'Produto não encontrado'}), 404
-            
-            # Atualiza os campos fornecidos
-            if 'preco' in data:
-                produto.preco = data['preco']
-            if 'status' in data:
-                produto.status = data['status']
+            # Chama a função de atualização
+            return atualizar_produto(produto_id, data)
 
-            # Comitar as mudanças no banco de dados
-            db.session.commit()
-            return jsonify({'message': 'Produto atualizado com sucesso'}), 200
         except Exception as e:
-            db.session.rollback()  # Rollback em caso de erro
-            return jsonify({'error': f'Erro ao atualizar o produto: {str(e)}'}), 400
+            print(f"Erro ao processar PUT: {str(e)}")
+            return jsonify({'error': f'Erro ao processar a solicitação: {str(e)}'}), 500
 
     elif request.method == 'DELETE':
         try:
@@ -80,9 +105,10 @@ def produto_controller():
             produto = Produto.query.get(produto_id)
             if not produto:
                 return jsonify({'error': 'Produto não encontrado'}), 404
-            
+
             db.session.delete(produto)
             db.session.commit()
             return jsonify({'message': 'Produto deletado com sucesso'}), 200
         except Exception as e:
+            print(f"Erro ao deletar produto: {str(e)}")
             return jsonify({'error': f'Erro ao deletar o produto: {str(e)}'}), 400
