@@ -1,7 +1,5 @@
 from database.db import db
 
-from database.db import db
-
 class Produto(db.Model):
     
     # Definição das colunas

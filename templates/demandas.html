@@ -41,19 +41,19 @@
                         <option value="aço inoxidável">Aço Inoxidável</option>
                     </select>
                 </div>
-    
+
                 <!-- Peso -->
                 <div class="input-group">
                     <label for="peso">Peso (kg)</label>
-                    <input type="number" id="peso" name="peso" placeholder="Ex: 50" required>
+                    <input type="number" id="peso" name="peso" placeholder="Ex: 50.00" required>
                 </div>
-    
+
                 <!-- Espessura -->
                 <div class="input-group">
                     <label for="espessura">Espessura (mm)</label>
-                    <input type="number" id="espessura" name="espessura" placeholder="Ex: 5" required>
+                    <input type="number" id="espessura" name="espessura" placeholder="Ex: 5.00" required>
                 </div>
-    
+
                 <!-- Botão de Enviar -->
                 <div class="input-group">
                     <button type="submit" class="submit-btn">Criar Cotação</button>
@@ -61,26 +61,54 @@
             </form>
         </div>
     </section>
-    
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+       document.addEventListener('DOMContentLoaded', () => {
             const API_URL = 'http://localhost:3000/metalurgica/produto';
-    
+
             document.getElementById('cotacao-form').addEventListener('submit', async (event) => {
                 event.preventDefault();
-    
-                const tipo = document.getElementById('tipo').value;
-                const peso = document.getElementById('peso').value;
-                const espessura = document.getElementById('espessura').value;
-                const usuario_id = 1; // Substitua com o ID do usuário logado no sistema.
-    
+
+                // Obter os elementos do formulário
+                const tipoElement = document.getElementById('tipo');
+                const pesoElement = document.getElementById('peso');
+                const espessuraElement = document.getElementById('espessura');
+
+                // Obter os valores
+                const tipo = tipoElement.value;
+                const peso = parseFloat(pesoElement.value); // Converter para número
+                const espessura = parseFloat(espessuraElement.value); // Converter para número
+
+                // Validar os valores
+                if (isNaN(peso) || isNaN(espessura)) {
+                    alert('Peso e Espessura devem ser números válidos.');
+                    return;
+                }
+
+                // Obter o ID do usuário do localStorage
+                const usuario_id = localStorage.getItem('usuario_id');
+
+                if (!usuario_id) {
+                    alert('Você precisa estar logado para criar uma cotação.');
+                    return;
+                }
+
+                // Dados para envio (preço definido como null)
+                const requestData = {
+                    tipo: tipo,
+                    peso: peso,
+                    espessura: espessura,
+                    preco: null, // Preço enviado como null
+                    usuario_id: usuario_id
+                };
+
                 try {
                     const response = await fetch(API_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ usuario_id, tipo, peso, espessura })
+                        body: JSON.stringify(requestData)
                     });
-    
+
                     if (response.ok) {
                         alert('Cotação criada com sucesso!');
                         document.getElementById('cotacao-form').reset(); // Limpa o formulário
@@ -93,7 +121,7 @@
                     alert('Erro ao conectar ao servidor. Tente novamente mais tarde.');
                 }
             });
-        });
+       });
     </script>
 </body>
 </html>

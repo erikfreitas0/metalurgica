@@ -3,7 +3,6 @@ from models.usuario import Usuario
 from models.vendedor import Vendedor
 from database.db import db
 
-
 def login_controller():
     if request.method == 'POST':
         data = request.get_json()
@@ -15,12 +14,17 @@ def login_controller():
         vendedor = Vendedor.query.filter_by(login=login, senha=senha).first()
 
         if usuario:
-            # Usuário encontrado com sucesso
-            return jsonify({"message": "Login realizado com sucesso!"}), 200
+            # Usuário encontrado com sucesso, retorna o ID e mensagem
+            return jsonify({
+                "message": "Login realizado com sucesso!",
+                "usuario_id": usuario.codigo  # Inclui o ID do usuário
+            }), 200
         
         elif vendedor:
-             # Usuário encontrado com sucesso
-            return jsonify({"message": "Login realizado com sucesso!"}), 200
+            # Vendedor encontrado com sucesso, retorna o ID e mensagem
+            return jsonify({
+                "message": "Login realizado com sucesso!",
+            }), 200
         
         else:
             # Credenciais inválidas

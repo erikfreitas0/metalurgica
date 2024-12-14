@@ -2,7 +2,7 @@ from database.db import db
 
 class Mensagem(db.Model):
     # Definição das colunas
-    codigo = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(50))
     email = db.Column(db.String(100))
     telefone = db.Column(db.String(20))  # Alterado para String para acomodar código de área e números
@@ -16,7 +16,7 @@ class Mensagem(db.Model):
 
     def to_dict(self):
         return {
-            'codigo': self.codigo,
+            'id': self.id,
             'nome': self.nome,
             'email': self.email,
             'telefone': self.telefone,

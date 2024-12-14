@@ -21,6 +21,7 @@
             <button type="submit">Login</button>
         </form>
         <p class="cliente-link">Não tem uma conta? <a href="cadastroUser.html">Cadastre-se aqui</a></p>
+        <p class="cliente-link">É um vendedor? <a href="loginVendedor.html">Entre aqui</a></p>
     </div>
 
     <script>
@@ -35,7 +36,7 @@
         return;
     }
 
-    try {
+        try {
         const response = await fetch("http://localhost:3000/metalurgica/login", {
             method: "POST",
             headers: {
@@ -48,7 +49,17 @@
         if (response.ok) {
             const data = await response.json();
             alert(data.message);  // Mostra a mensagem de sucesso
-            window.location.href = "home.html";  // Redireciona para a página home
+
+            // Salva o ID do usuário no localStorage
+            if (data.usuario_id) {  // Verifica se o backend retornou o `usuario_id`
+                localStorage.setItem("usuario_id", data.usuario_id);
+                console.log("ID do usuário salvo no localStorage:", data.usuario_id);
+            } else {
+                console.error("Nenhum ID de usuário retornado pelo servidor.");
+            }
+
+            // Redireciona para a página home
+            window.location.href = "home.html";
         } else {
             const errorData = await response.json();
             alert(`Erro: ${errorData.error}`);
@@ -58,6 +69,7 @@
         alert("Erro ao conectar com o servidor. Tente novamente.");
     }
 }
+
 
 
     </script>

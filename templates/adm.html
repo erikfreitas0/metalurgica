@@ -14,7 +14,6 @@
         <main>
             <div class="buttons">
                 <button id="btnCotacoes">Cotações</button>
-                <button id="btnMensagens">Mensagems</button>
             </div>
             <div id="content">
                 <!-- Conteúdo dinâmico será exibido aqui -->
@@ -27,72 +26,113 @@
 
     <script>
         const API_COTACOES = 'http://localhost:3000/metalurgica/produto'; // Ajuste para o endpoint correto
-        const API_MENSAGENS = 'http://localhost:3000/metalurgica/mensagem'; // Ajuste para o endpoint correto
-
         const btnCotacoes = document.getElementById('btnCotacoes');
-        const btnMensagens = document.getElementById('btnMensagens');
         const contentDiv = document.getElementById('content');
 
         // Função para buscar dados do backend
         async function fetchData(apiUrl) {
-    try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        console.log('Dados recebidos da API:', data); // Exibe a resposta no console
-        return data;
-    } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        return [];
-    }
-}
-
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                console.log('Dados recebidos da API:', data); // Exibe a resposta no console
+                return data;
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+                return [];
+            }
+        }
 
         // Exibe cotações no conteúdo
         btnCotacoes.addEventListener('click', async () => {
-    contentDiv.innerHTML = '<h2>Cotações</h2>';
-    const data = await fetchData(API_COTACOES);
+            contentDiv.innerHTML = '<h2>Cotações</h2>';
+            const data = await fetchData(API_COTACOES);
 
-    // Valide o formato recebido
-    const produto = Array.isArray(data) ? data : data.produtos || []; // Ajuste conforme o formato real
+            // Valide o formato recebido
+            const produto = Array.isArray(data) ? data : data.produtos || []; // Ajuste conforme o formato real
 
-    if (produto.length === 0) {
-        contentDiv.innerHTML += '<p>Nenhuma cotação encontrada.</p>';
-    } else {
-        produto.forEach((item) => {
-            const container = document.createElement('div');
-            container.className = 'item';
-            container.innerHTML = `
-                <h3>Demanda: ${item.codigo}</h3>
-                <p><strong>Tipo:</strong> ${item.tipo}</p>
-                <p><strong>Peso:</strong> ${item.peso}</p>
-                <p><strong>Espessura:</strong> ${item.espessura}</p>
-                <p><strong>Preço:</strong> R$ ${item.preco}</p>
-            `;
-            contentDiv.appendChild(container);
-        });
-    }
-});
-
-
-
-
-        // Exibe mensagems no conteúdo
-        btnMensagens.addEventListener('click', async () => {
-            contentDiv.innerHTML = '<h2>Mensagems</h2>';
-            const mensagems = await fetchData(API_MENSAGENS);
-            if (mensagems.length === 0) {
-                contentDiv.innerHTML += '<p>Nenhuma mensagem encontrada.</p>';
+            if (produto.length === 0) {
+                contentDiv.innerHTML += '<p>Nenhuma cotação encontrada.</p>';
             } else {
-                mensagems.forEach((mensagem) => {
+                produto.forEach((produto) => {
                     const container = document.createElement('div');
-                    container.className = 'item';
+                    container.className = 'produto';
                     container.innerHTML = `
-                        <h3>De: ${mensagem.nome}</h3>
-                        <p><strong>E-mail:</strong> ${mensagem.email}</p>
-                        <p><strong>Telefone:</strong> ${mensagem.telefone}</p>
-                        <p>${mensagem.mensagem}</p>
+                        <h3>Demanda: ${produto.codigo}</h3>
+                        <p><strong>Tipo:</strong> ${produto.tipo}</p>
+                        <p><strong>Peso:</strong> ${produto.peso} kg</p>
+                        <p><strong>Espessura:</strong> ${produto.espessura} mm</p>
+                        <p><strong>Preço:</strong> 
+                            <input type="number" id="preco_${produto.codigo}" value="${produto.preco !== null ? produto.preco : ''}" min="0" step="0.01" />
+                        </p>
+                        <p><strong>Status:</strong> 
+                            <select id="status_${produto.codigo}">
+                                <option value="pendente" ${produto.status === 'pendente' ? 'selected' : ''}>Pendente</option>
+                                <option value="aprovado" ${produto.status === 'aprovado' ? 'selected' : ''}>Aprovado</option>
+                                <option value="negado" ${produto.status === 'negado' ? 'selected' : ''}>Negado</option>
+                            </select>
+                        </p>
                     `;
                     contentDiv.appendChild(container);
+
+                    // Permitir edição do preço
+                    const precoInput = document.getElementById(`preco_${produto.codigo}`);
+                    precoInput.addEventListener('change', async (e) => {
+                        const preco = parseFloat(e.target.value);
+                        if (isNaN(preco) || preco < 0) {
+                            alert('Preço inválido. Insira um valor numérico válido.');
+                            return;
+                        }
+
+                        // Enviar preço alterado para o servidor
+                        try {
+                            const response = await fetch(`${API_COTACOES}/${produto.codigo}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    preco: preco
+                                })
+                            });
+
+                            if (response.ok) {
+                                alert('Preço atualizado com sucesso!');
+                            } else {
+                                alert('Erro ao atualizar o preço.');
+                            }
+                        } catch (error) {
+                            console.error('Erro ao atualizar preço:', error);
+                            alert('Erro ao conectar ao servidor.');
+                        }
+                    });
+
+                    // Permitir mudança de status
+                    const statusSelect = document.getElementById(`status_${produto.codigo}`);
+                    statusSelect.addEventListener('change', async (e) => {
+                        const novoStatus = e.target.value;
+
+                        // Enviar o status alterado para o servidor
+                        try {
+                            const response = await fetch(`${API_COTACOES}/${produto.codigo}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    status: novoStatus
+                                })
+                            });
+
+                            if (response.ok) {
+                                alert('Status atualizado com sucesso!');
+                            } else {
+                                alert('Erro ao atualizar o status.');
+                            }
+                        } catch (error) {
+                            console.error('Erro ao atualizar status:', error);
+                            alert('Erro ao conectar ao servidor.');
+                        }
+                    });
                 });
             }
         });
