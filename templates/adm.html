@@ -85,7 +85,7 @@
 
                         // Enviar preço alterado para o servidor
                         try {
-                            const response = await fetch(`${API_COTACOES}/${produto.codigo}`, {
+                            const response = await fetch(`${API_COTACOES}/${produto.codigo}`, {  // A URL está correta aqui
                                 method: 'PUT',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -113,7 +113,7 @@
 
                         // Enviar o status alterado para o servidor
                         try {
-                            const response = await fetch(`${API_COTACOES}/${produto.codigo}`, {
+                            const response = await fetch(`${API_COTACOES}/${produto.codigo}`, {  // A URL está correta aqui
                                 method: 'PUT',
                                 headers: {
                                     'Content-Type': 'application/json',

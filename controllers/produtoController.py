@@ -52,10 +52,9 @@ def produto_controller():
 
     elif request.method == 'PUT':
         try:
+            # Pega o ID do produto da URL
+            produto_id = request.view_args['produto_id']  # Extrai o ID da URL
             data = request.get_json()
-            produto_id = data.get('codigo')  # Usar o campo 'codigo' para buscar o produto
-            if not produto_id:
-                return jsonify({'error': 'Código do produto não fornecido'}), 400
 
             produto = Produto.query.get(produto_id)
             if not produto:
