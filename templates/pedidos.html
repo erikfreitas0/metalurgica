@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Metalúrgica Favorit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles_pedidos.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1>Metalúrgica <span>Favorit</span></h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="home.html">Início</a></li>
+                    <li><a href="demandas.html">Orçamentos</a></li>
+                    <li><a href="informacoes.html">Sobre</a></li>
+                    <li><a href="pedidos.html">Meus Orçamentos</a></li>
+                </ul>
+            </nav>
+            <a href="loginUser.html" class="btn cta-btn">Faça já seu Login!</a>
+        </div>
+    </header>
+    <main>
+        <div id="filtros">
+            <h3>Filtros</h3>
+            <label for="filtroProdutoId">ID do Produto:</label>
+            <input type="number" id="filtroProdutoId" min="0" placeholder="Digite o ID do produto">
+            <label for="filtroData">Data:</label>
+            <input type="date" id="filtroData">
+            <button id="btnFiltrar">Filtrar</button>
+        </div>
+        <div id="content">
+            <!-- Conteúdo dinâmico será exibido aqui -->
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const API_COTACOES = 'http://localhost:3000/metalurgica/produto';
+            const btnFiltrar = document.getElementById('btnFiltrar');
+            const contentDiv = document.getElementById('content');
+            const filtroProdutoId = document.getElementById('filtroProdutoId');
+            const filtroData = document.getElementById('filtroData');
+
+            // Função para obter o ID do usuário logado
+            function obterUsuarioLogado() {
+                const usuarioId = localStorage.getItem('usuario_id');
+                if (!usuarioId) {
+                    // Se não estiver logado, exibe mensagem de aviso e redireciona para a página de login
+                    alert('É necessário estar logado para acessar esta página!');
+                    window.location.href = 'loginUser.html'; // Redireciona para o login
+                    return null; // Retorna null, indicando que o usuário não está logado
+                }
+                return usuarioId;
+            }
+
+            // Função para buscar dados do backend com filtros
+            async function fetchData(apiUrl) {
+                try {
+                    const response = await fetch(apiUrl);
+                    const data = await response.json();
+                    console.log('Dados recebidos da API:', data);
+                    return data;
+                } catch (error) {
+                    console.error('Erro ao buscar dados:', error);
+                    return [];
+                }
+            }
+
+            // Função para montar query string com filtros
+            function montarQueryString() {
+                const params = new URLSearchParams();
+                const usuarioId = obterUsuarioLogado(); // Adiciona automaticamente o ID do usuário logado
+                if (!usuarioId) return ''; // Se o usuário não estiver logado, não continua com a busca
+                params.append('usuario_id', usuarioId);
+                if (filtroProdutoId.value) params.append('produto_codigo', filtroProdutoId.value);
+                if (filtroData.value) params.append('data', filtroData.value);
+                return params.toString() ? `?${params.toString()}` : '';
+            }
+
+            // Função para exibir orçamentos no conteúdo
+            // Função para exibir orçamentos no conteúdo
+            async function exibirOrcamentos(apiUrl) {
+                contentDiv.innerHTML = '<h2>Meus Orçamentos</h2>';
+                const data = await fetchData(apiUrl);
+
+                const produtos = Array.isArray(data.produtos) ? data.produtos : [];
+                if (produtos.length === 0) {
+                    contentDiv.innerHTML += '<p>Nenhum orçamento encontrado.</p>';
+                } else {
+                    produtos.forEach((produto) => {
+                        const container = document.createElement('div');
+                        container.className = 'item';
+
+                        // Formatar data de criação
+                        const dataCriacao = produto.data_criacao 
+                            ? new Date(produto.data_criacao).toLocaleDateString('pt-BR', {
+                                day: '2-digit', month: '2-digit', year: 'numeric'
+                            })
+                            : 'Data não disponível';
+
+                        // Garantir que preco seja um número válido e formatar com 2 casas decimais
+                        const preco = parseFloat(produto.preco);
+                        const precoFormatado = isNaN(preco) ? 'Preço não disponível' : preco.toFixed(2);
+
+                        container.innerHTML = `
+                            <h3>Produto: ${produto.codigo}</h3>
+                            <p><strong>Tipo:</strong> ${produto.tipo}</p>
+                            <p><strong>Peso:</strong> ${produto.peso} kg</p>
+                            <p><strong>Espessura:</strong> ${produto.espessura} mm</p>
+                            <p><strong>Preço:</strong> R$ ${precoFormatado}</p>
+                            <p><strong>Status:</strong> ${produto.status}</p>
+                            <p><strong>Data de Criação:</strong> ${dataCriacao}</p>
+                        `;
+                        contentDiv.appendChild(container);
+                    });
+                }
+            }
+
+
+            // Filtrar orçamentos ao clicar no botão "Filtrar"
+            btnFiltrar.addEventListener('click', () => {
+                const queryString = montarQueryString();
+                if (queryString) {
+                    exibirOrcamentos(`${API_COTACOES}${queryString}`);
+                }
+            });
+
+            // Exibir orçamentos automaticamente ao carregar a página
+            const queryString = montarQueryString();
+            if (queryString) {
+                exibirOrcamentos(`${API_COTACOES}${queryString}`);
+            }
+        });
+    </script>
+</body>
+</html>

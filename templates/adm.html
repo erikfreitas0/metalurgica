@@ -35,123 +35,134 @@
     </div>
 
     <script>
-        const API_COTACOES = 'http://localhost:3000/metalurgica/produto'; // URL da API
-        const btnCotacoes = document.getElementById('btnCotacoes');
-        const btnFiltrar = document.getElementById('btnFiltrar');
-        const contentDiv = document.getElementById('content');
-        const filtroProdutoCodigo = document.getElementById('filtroProdutoId');  // Alterado para filtroProdutoCodigo
-        const filtroUsuarioId = document.getElementById('filtroUsuarioId');
-        const filtroData = document.getElementById('filtroData');
-    
-        // Função para buscar dados do backend com filtros
-        async function fetchData(apiUrl) {
-            try {
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-                console.log('Dados recebidos da API:', data);
-                return data;
-            } catch (error) {
-                console.error('Erro ao buscar dados:', error);
-                return [];
+        document.addEventListener('DOMContentLoaded', () => {
+            const API_COTACOES = 'http://localhost:3000/metalurgica/produto';
+            const btnCotacoes = document.getElementById('btnCotacoes');
+            const btnFiltrar = document.getElementById('btnFiltrar');
+            const contentDiv = document.getElementById('content');
+            const filtroProdutoId = document.getElementById('filtroProdutoId');
+            const filtroUsuarioId = document.getElementById('filtroUsuarioId');
+            const filtroData = document.getElementById('filtroData');
+
+            // Função para buscar dados do backend com filtros
+            async function fetchData(apiUrl) {
+                try {
+                    const response = await fetch(apiUrl);
+                    const data = await response.json();
+                    console.log('Dados recebidos da API:', data);
+                    return data;
+                } catch (error) {
+                    console.error('Erro ao buscar dados:', error);
+                    return [];
+                }
             }
-        }
-    
-        // Função para montar query string com filtros
-        function montarQueryString() {
-            const params = new URLSearchParams();
-            if (filtroProdutoCodigo.value) params.append('produto_codigo', filtroProdutoCodigo.value);  // Alterado para produto_codigo
-            if (filtroUsuarioId.value) params.append('usuario_id', filtroUsuarioId.value);
-            if (filtroData.value) params.append('data', filtroData.value);
-            return params.toString() ? `?${params.toString()}` : '';
-        }
-    
-        // Função para exibir cotações no conteúdo
-        async function exibirCotacoes(apiUrl) {
-            contentDiv.innerHTML = '<h2>Cotações</h2>';
-            const data = await fetchData(apiUrl);
-    
-            const produtos = Array.isArray(data.produtos) ? data.produtos : [];
-            if (produtos.length === 0) {
-                contentDiv.innerHTML += '<p>Nenhuma cotação encontrada.</p>';
-            } else {
-                produtos.forEach((produto) => {
-                    const container = document.createElement('div');
-                    container.className = 'item';
-                    container.innerHTML = `
-                        <h3>Produto: ${produto.codigo}</h3> <!-- Alterado para produto.codigo -->
-                        <p><strong>Tipo:</strong> ${produto.tipo}</p>
-                        <p><strong>Peso:</strong> ${produto.peso} kg</p>
-                        <p><strong>Espessura:</strong> ${produto.espessura} mm</p>
-                        <p><strong>Preço:</strong> 
-                            <input type="number" id="preco_${produto.codigo}" value="${produto.preco || 0}" min="0" step="0.01" />
-                        </p>
-                        <p><strong>Status:</strong> 
-                            <select id="status_${produto.codigo}">
-                                <option value="pendente" ${produto.status === 'pendente' ? 'selected' : ''}>Pendente</option>
-                                <option value="aprovado" ${produto.status === 'aprovado' ? 'selected' : ''}>Aprovado</option>
-                                <option value="negado" ${produto.status === 'negado' ? 'selected' : ''}>Negado</option>
-                            </select>
-                        </p>
-                    `;
-                    contentDiv.appendChild(container);
-    
-                    // Atualizar preço
-                    const precoInput = document.getElementById(`preco_${produto.codigo}`);
-                    precoInput.addEventListener('change', async () => {
-                        const preco = parseFloat(precoInput.value);
-                        if (isNaN(preco) || preco < 0) {
-                            alert('Preço inválido. Insira um valor numérico válido.');
-                            return;
-                        }
-                        try {
-                            const response = await fetch(`${API_COTACOES}/${produto.codigo}`, { // Alterado para produto.codigo
-                                method: 'PUT',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ preco })
-                            });
-                            if (response.ok) {
-                                alert('Preço atualizado com sucesso!');
-                            } else {
-                                alert('Erro ao atualizar o preço.');
-                            }
-                        } catch (error) {
-                            console.error('Erro ao atualizar preço:', error);
-                            alert('Erro ao conectar ao servidor.');
-                        }
-                    });
-    
-                    // Atualizar status
-                    const statusSelect = document.getElementById(`status_${produto.codigo}`); // Alterado para produto.codigo
-                    statusSelect.addEventListener('change', async () => {
-                        const novoStatus = statusSelect.value;
-                        try {
-                            const response = await fetch(`${API_COTACOES}/${produto.codigo}`, { // Alterado para produto.codigo
-                                method: 'PUT',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ status: novoStatus })
-                            });
-                            if (response.ok) {
-                                alert('Status atualizado com sucesso!');
-                            } else {
-                                alert('Erro ao atualizar o status.');
-                            }
-                        } catch (error) {
-                            console.error('Erro ao atualizar status:', error);
-                            alert('Erro ao conectar ao servidor.');
-                        }
-                    });
-                });
+
+            // Função para montar query string com filtros
+            function montarQueryString() {
+                const params = new URLSearchParams();
+                if (filtroProdutoId.value) params.append('produto_codigo', filtroProdutoId.value);
+                if (filtroUsuarioId.value) params.append('usuario_id', filtroUsuarioId.value);
+                if (filtroData.value) params.append('data', filtroData.value);
+                return params.toString() ? `?${params.toString()}` : '';
             }
-        }
-    
-        // Exibir todas as cotações ao clicar no botão "Cotações"
-        btnCotacoes.addEventListener('click', () => exibirCotacoes(API_COTACOES));
-    
-        // Filtrar cotações ao clicar no botão "Filtrar"
-        btnFiltrar.addEventListener('click', () => {
-            const queryString = montarQueryString();
-            exibirCotacoes(`${API_COTACOES}${queryString}`);
+
+            // Função para exibir cotações no conteúdo
+            async function exibirCotacoes(apiUrl) {
+                contentDiv.innerHTML = '<h2>Cotações</h2>';
+                const data = await fetchData(apiUrl);
+
+                const produtos = Array.isArray(data.produtos) ? data.produtos : [];
+                if (produtos.length === 0) {
+                    contentDiv.innerHTML += '<p>Nenhuma cotação encontrada.</p>';
+                } else {
+                    produtos.forEach((produto) => {
+                        const container = document.createElement('div');
+                        container.className = 'item';
+
+                        // Formatar data de criação
+                        const dataCriacao = produto.data_criacao 
+                            ? new Date(produto.data_criacao).toLocaleDateString('pt-BR', {
+                                day: '2-digit', month: '2-digit', year: 'numeric'
+                            })
+                            : 'Data não disponível';
+
+                        container.innerHTML = `
+                            <h3>Produto: ${produto.codigo}</h3>
+                            <p><strong>Tipo:</strong> ${produto.tipo}</p>
+                            <p><strong>Peso:</strong> ${produto.peso} kg</p>
+                            <p><strong>Espessura:</strong> ${produto.espessura} mm</p>
+                            <p><strong>Preço:</strong> 
+                                <input type="number" id="preco_${produto.codigo}" value="${produto.preco || 0}" min="0" step="0.01" />
+                            </p>
+                            <p><strong>Status:</strong> 
+                                <select id="status_${produto.codigo}">
+                                    <option value="pendente" ${produto.status === 'pendente' ? 'selected' : ''}>Pendente</option>
+                                    <option value="aprovado" ${produto.status === 'aprovado' ? 'selected' : ''}>Aprovado</option>
+                                    <option value="negado" ${produto.status === 'negado' ? 'selected' : ''}>Negado</option>
+                                </select>
+                            </p>
+                            <p><strong>Data de Criação:</strong> ${dataCriacao}</p>
+                        `;
+                        contentDiv.appendChild(container);
+
+                        // Atualizar preço
+                        const precoInput = document.getElementById(`preco_${produto.codigo}`);
+                        precoInput.addEventListener('change', async () => {
+                            const preco = parseFloat(precoInput.value);
+                            if (isNaN(preco) || preco < 0) {
+                                alert('Preço inválido. Insira um valor numérico válido.');
+                                return;
+                            }
+                            try {
+                                const response = await fetch(`${API_COTACOES}/${produto.codigo}`, {
+                                    method: 'PUT',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ preco })
+                                });
+                                if (response.ok) {
+                                    alert('Preço atualizado com sucesso!');
+                                } else {
+                                    alert('Erro ao atualizar o preço.');
+                                }
+                            } catch (error) {
+                                console.error('Erro ao atualizar preço:', error);
+                                alert('Erro ao conectar ao servidor.');
+                            }
+                        });
+
+                        // Atualizar status
+                        const statusSelect = document.getElementById(`status_${produto.codigo}`);
+                        statusSelect.addEventListener('change', async () => {
+                            const novoStatus = statusSelect.value;
+                            try {
+                                const response = await fetch(`${API_COTACOES}/${produto.codigo}`, {
+                                    method: 'PUT',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ status: novoStatus })
+                                });
+                                if (response.ok) {
+                                    alert('Status atualizado com sucesso!');
+                                } else {
+                                    alert('Erro ao atualizar o status.');
+                                }
+                            } catch (error) {
+                                console.error('Erro ao atualizar status:', error);
+                                alert('Erro ao conectar ao servidor.');
+                            }
+                        });
+                    });
+                }
+            }
+
+            // Exibir todas as cotações ao clicar no botão "Cotações"
+            btnCotacoes.addEventListener('click', () => exibirCotacoes(API_COTACOES));
+
+            // Filtrar cotações ao clicar no botão "Filtrar"
+            btnFiltrar.addEventListener('click', () => {
+                const queryString = montarQueryString();
+                exibirCotacoes(`${API_COTACOES}${queryString}`);
+            });
         });
-    </script>    
+    </script>
 </body>
 </html>

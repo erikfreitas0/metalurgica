@@ -107,7 +107,9 @@
                         const responseText = await response.text(); // Lê a resposta como texto
 
             if (response.ok) {
-                alert(responseText); // Exibe a mensagem retornada
+                alert('Cadastro concluído com sucesso!'); // Exibe a mensagem retornada
+
+                window.location.href = "loginUser.html";
             } else {
                 alert(`Erro ao cadastrar usuário: ${responseText}`);
             }
