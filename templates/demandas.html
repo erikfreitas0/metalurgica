@@ -17,7 +17,7 @@
             <nav class="main-nav">
                 <ul>
                     <li><a href="home.html">Início</a></li>
-                    <li><a href="demandas.html">Demandas</a></li>
+                    <li><a href="demandas.html">Orçamentos</a></li>
                     <li><a href="informacoes.html">Sobre</a></li>
                     <li><a href="contato.html">Contato</a></li>
                 </ul>
@@ -28,7 +28,7 @@
 
     <section class="cotacao-section">
         <div class="container">
-            <h2>Preencha os detalhes da cotação</h2>
+            <h2>Preencha os detalhes do orçamento</h2>
             <form class="cotacao-form" id="cotacao-form">
                 <!-- Tipo de Metal -->
                 <div class="input-group">
@@ -56,7 +56,7 @@
 
                 <!-- Botão de Enviar -->
                 <div class="input-group">
-                    <button type="submit" class="submit-btn">Criar Cotação</button>
+                    <button type="submit" class="submit-btn">Criar Orçamento</button>
                 </div>
             </form>
         </div>
@@ -89,7 +89,7 @@
                 const usuario_id = localStorage.getItem('usuario_id');
 
                 if (!usuario_id) {
-                    alert('Você precisa estar logado para criar uma cotação.');
+                    alert('Você precisa estar logado para criar um orçamento.');
                     return;
                 }
 
@@ -110,11 +110,11 @@
                     });
 
                     if (response.ok) {
-                        alert('Cotação criada com sucesso!');
+                        alert('Orçamento criado com sucesso!');
                         document.getElementById('cotacao-form').reset(); // Limpa o formulário
                     } else {
                         const errorData = await response.json();
-                        alert(`Erro ao criar a cotação: ${errorData.error || 'Erro desconhecido'}`);
+                        alert(`Erro ao criar o orçamento: ${errorData.error || 'Erro desconhecido'}`);
                     }
                 } catch (error) {
                     console.error('Erro:', error);
