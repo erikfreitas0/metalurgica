@@ -15,6 +15,16 @@
             <div class="buttons">
                 <button id="btnCotacoes">Cotações</button>
             </div>
+            <div id="filtros">
+                <h3>Filtros</h3>
+                <label for="filtroProdutoId">ID do Produto:</label>
+                <input type="number" id="filtroProdutoId" min="0" placeholder="Digite o ID do produto">
+                <label for="filtroUsuarioId">ID do Usuário:</label>
+                <input type="number" id="filtroUsuarioId" min="0" placeholder="Digite o ID do usuário">
+                <label for="filtroData">Data:</label>
+                <input type="date" id="filtroData">
+                <button id="btnFiltrar">Filtrar</button>
+            </div>
             <div id="content">
                 <!-- Conteúdo dinâmico será exibido aqui -->
             </div>
@@ -27,9 +37,13 @@
     <script>
         const API_COTACOES = 'http://localhost:3000/metalurgica/produto'; // URL da API
         const btnCotacoes = document.getElementById('btnCotacoes');
+        const btnFiltrar = document.getElementById('btnFiltrar');
         const contentDiv = document.getElementById('content');
-
-        // Função para buscar dados do backend
+        const filtroProdutoCodigo = document.getElementById('filtroProdutoId');  // Alterado para filtroProdutoCodigo
+        const filtroUsuarioId = document.getElementById('filtroUsuarioId');
+        const filtroData = document.getElementById('filtroData');
+    
+        // Função para buscar dados do backend com filtros
         async function fetchData(apiUrl) {
             try {
                 const response = await fetch(apiUrl);
@@ -41,12 +55,21 @@
                 return [];
             }
         }
-
+    
+        // Função para montar query string com filtros
+        function montarQueryString() {
+            const params = new URLSearchParams();
+            if (filtroProdutoCodigo.value) params.append('produto_codigo', filtroProdutoCodigo.value);  // Alterado para produto_codigo
+            if (filtroUsuarioId.value) params.append('usuario_id', filtroUsuarioId.value);
+            if (filtroData.value) params.append('data', filtroData.value);
+            return params.toString() ? `?${params.toString()}` : '';
+        }
+    
         // Função para exibir cotações no conteúdo
-        btnCotacoes.addEventListener('click', async () => {
+        async function exibirCotacoes(apiUrl) {
             contentDiv.innerHTML = '<h2>Cotações</h2>';
-            const data = await fetchData(API_COTACOES);
-
+            const data = await fetchData(apiUrl);
+    
             const produtos = Array.isArray(data.produtos) ? data.produtos : [];
             if (produtos.length === 0) {
                 contentDiv.innerHTML += '<p>Nenhuma cotação encontrada.</p>';
@@ -55,7 +78,7 @@
                     const container = document.createElement('div');
                     container.className = 'produto';
                     container.innerHTML = `
-                        <h3>Produto: ${produto.codigo}</h3>
+                        <h3>Produto: ${produto.codigo}</h3> <!-- Alterado para produto.codigo -->
                         <p><strong>Tipo:</strong> ${produto.tipo}</p>
                         <p><strong>Peso:</strong> ${produto.peso} kg</p>
                         <p><strong>Espessura:</strong> ${produto.espessura} mm</p>
@@ -71,7 +94,7 @@
                         </p>
                     `;
                     contentDiv.appendChild(container);
-
+    
                     // Atualizar preço
                     const precoInput = document.getElementById(`preco_${produto.codigo}`);
                     precoInput.addEventListener('change', async () => {
@@ -81,7 +104,7 @@
                             return;
                         }
                         try {
-                            const response = await fetch(`${API_COTACOES}/${produto.codigo}`, {
+                            const response = await fetch(`${API_COTACOES}/${produto.codigo}`, { // Alterado para produto.codigo
                                 method: 'PUT',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({ preco })
@@ -96,13 +119,13 @@
                             alert('Erro ao conectar ao servidor.');
                         }
                     });
-
+    
                     // Atualizar status
-                    const statusSelect = document.getElementById(`status_${produto.codigo}`);
+                    const statusSelect = document.getElementById(`status_${produto.codigo}`); // Alterado para produto.codigo
                     statusSelect.addEventListener('change', async () => {
                         const novoStatus = statusSelect.value;
                         try {
-                            const response = await fetch(`${API_COTACOES}/${produto.codigo}`, {
+                            const response = await fetch(`${API_COTACOES}/${produto.codigo}`, { // Alterado para produto.codigo
                                 method: 'PUT',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({ status: novoStatus })
@@ -119,7 +142,16 @@
                     });
                 });
             }
+        }
+    
+        // Exibir todas as cotações ao clicar no botão "Cotações"
+        btnCotacoes.addEventListener('click', () => exibirCotacoes(API_COTACOES));
+    
+        // Filtrar cotações ao clicar no botão "Filtrar"
+        btnFiltrar.addEventListener('click', () => {
+            const queryString = montarQueryString();
+            exibirCotacoes(`${API_COTACOES}${queryString}`);
         });
-    </script>
+    </script>    
 </body>
 </html>

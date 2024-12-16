@@ -3,7 +3,6 @@ from database.db import db
 from models.produto import Produto
 from models.usuario import Usuario
 
-from flask import request, jsonify
 
 def atualizar_produto(produto_id):
     """
@@ -74,9 +73,27 @@ def produto_controller():
 
     elif request.method == 'GET':
         try:
-            produtos = Produto.query.all()
-            return jsonify({'produtos': [produto.to_dict() for produto in produtos]})
+            # Obter parâmetros de filtragem da query string
+            produto_codigo = request.args.get('produto_codigo', type=int)  # Alterado para 'produto_codigo'
+            usuario_id = request.args.get('usuario_id', type=int)
+            data_criacao = request.args.get('data')  # Data no formato 'YYYY-MM-DD'
+
+            # Base da query
+            query = Produto.query
+
+            if produto_codigo:
+                query = query.filter(Produto.codigo == produto_codigo)  # Alterado para Produto.codigo
+            if usuario_id:
+                query = query.filter(Produto.usuario_id == usuario_id)
+            if data_criacao:
+                query = query.filter(Produto.data_criacao == data_criacao)
+
+            # Buscar produtos com os filtros aplicados
+            produtos = query.all()
+
+            return jsonify({'produtos': [produto.to_dict() for produto in produtos]}), 200
         except Exception as e:
+            print(f"Erro ao buscar produtos: {str(e)}")
             return jsonify({'error': f'Não foi possível buscar produtos: {str(e)}'}), 400
 
     elif request.method == 'PUT':
@@ -92,7 +109,7 @@ def produto_controller():
                 return jsonify({'error': 'Dados enviados no formato incorreto. Deve ser um JSON válido.'}), 400
 
             # Chama a função de atualização
-            return atualizar_produto(produto_id, data)
+            return atualizar_produto(produto_id)
 
         except Exception as e:
             print(f"Erro ao processar PUT: {str(e)}")
@@ -101,7 +118,10 @@ def produto_controller():
     elif request.method == 'DELETE':
         try:
             data = request.get_json()
-            produto_id = data['codigo']
+            produto_id = data.get('produto_id')
+            if not produto_id:
+                return jsonify({'error': 'ID do produto não fornecido'}), 400
+
             produto = Produto.query.get(produto_id)
             if not produto:
                 return jsonify({'error': 'Produto não encontrado'}), 404
