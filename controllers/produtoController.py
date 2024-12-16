@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from database.db import db
+from sqlalchemy import func
 from models.produto import Produto
 from models.usuario import Usuario
 
@@ -86,8 +87,8 @@ def produto_controller():
             if usuario_id:
                 query = query.filter(Produto.usuario_id == usuario_id)
             if data_criacao:
-                query = query.filter(Produto.data_criacao == data_criacao)
-
+                # Usar func.DATE() para ignorar a hora na comparação da data
+                query = query.filter(func.DATE(Produto.data_criacao) == data_criacao)
             # Buscar produtos com os filtros aplicados
             produtos = query.all()
 
