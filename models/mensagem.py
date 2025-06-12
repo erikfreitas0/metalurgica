@@ -1,11 +1,10 @@
 from database.db import db
 
 class Mensagem(db.Model):
-    # Definição das colunas
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(50))
     email = db.Column(db.String(100))
-    telefone = db.Column(db.String(20))  # Alterado para String para acomodar código de área e números
+    telefone = db.Column(db.String(20)) 
     mensagem = db.Column(db.String(500))
 
     def __init__(self, nome, email, telefone, mensagem):
